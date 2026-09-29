@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CombiLive BW — Supporting Materials</title>
+<style>
+  :root{
+    --primary:#0F6E56; --primary-dark:#085041; --bg:#F7F6F2; --card:#FFFFFF;
+    --text:#1D1D1B; --text-muted:#6B6A64; --border:#E4E2DA;
+    --live:#1D9E75; --live-bg:#EAF3DE; --stale:#BA7517; --stale-bg:#FAEEDA; --offline:#888780; --offline-bg:#F1EFE8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);}
+  header{background:var(--primary-dark);color:#fff;padding:22px 20px;}
+  header h1{margin:0 0 4px;font-size:20px;}
+  header p{margin:0;font-size:13px;opacity:0.85;}
+  nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 8px;}
+  nav a{flex:none;padding:12px 14px;font-size:13px;color:var(--text-muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;}
+  nav a:hover{color:var(--primary);border-color:var(--primary);}
+  main{max-width:900px;margin:0 auto;padding:0 16px 60px;}
+  section{padding:36px 0;border-bottom:1px solid var(--border);}
+  section:last-child{border-bottom:none;}
+  section h2{font-size:18px;margin:0 0 6px;color:var(--primary-dark);}
+  section .tag{display:inline-block;font-size:11px;font-weight:600;background:var(--live-bg);color:#27500A;padding:2px 8px;border-radius:20px;margin-bottom:10px;}
+  section > p.lead{color:var(--text-muted);font-size:14px;margin:0 0 20px;max-width:640px;}
+  .diagram{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;overflow-x:auto;}
+  .diagram svg{display:block;margin:0 auto;}
+  .schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+  .schema-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;}
+  .schema-card h4{margin:0 0 8px;font-size:13px;color:var(--primary-dark);border-bottom:1px solid var(--border);padding-bottom:6px;}
+  .schema-card ul{margin:0;padding-left:16px;font-size:12px;color:var(--text-muted);line-height:1.7;}
+  .schema-card code{color:var(--text);}
+
+  /* Passenger prototype */
+  .phone{max-width:300px;margin:0 auto;border:8px solid #1D1D1B;border-radius:28px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+  .app-header{background:var(--primary-dark);color:#fff;padding:12px 14px;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+  .app-header span{font-size:10px;background:rgba(255,255,255,0.15);padding:2px 7px;border-radius:20px;font-weight:500;}
+  .app-search{padding:10px 14px;background:#fff;border-bottom:1px solid var(--border);}
+  .app-search input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;}
+  #map{height:200px;width:100%;position:relative;}
+  .app-list{padding:10px 14px;background:#fff;max-height:200px;overflow-y:auto;}
+  .app-list h5{font-size:11px;color:var(--text-muted);margin:0 0 8px;}
+  .vcard{background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-size:12px;cursor:pointer;}
+  .vcard .route{font-weight:600;font-size:12px;margin:0 0 2px;}
+  .vcard .sub{color:var(--text-muted);font-size:11px;margin:0;}
+  .status{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap;}
+  .status.LIVE{background:var(--live-bg);color:#27500A;}
+  .status.STALE{background:var(--stale-bg);color:#633806;}
+  .status.OFFLINE{background:var(--offline-bg);color:#444441;}
+  .demo-note{font-size:10px;color:#fff;background:#412402;display:inline-block;padding:2px 8px;border-radius:6px;margin:8px 14px 0;font-weight:600;}
+
+  /* Driver wireframes */
+  .driver-screens{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;}
+  .dscreen{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;}
+  .dscreen .step{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin:0 0 10px;}
+  .dscreen .btn{display:block;width:100%;text-align:center;padding:10px 0;border-radius:8px;font-size:12px;font-weight:600;margin-top:8px;}
+  .btn-primary{background:var(--live);color:#fff;}
+  .btn-danger{background:#C0392B;color:#fff;}
+  .btn-outline{border:1px solid var(--border);color:var(--text);}
+  .status-row{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border);}
+  .status-row:last-of-type{border-bottom:none;}
+  .ok{color:var(--live);font-weight:600;}
+
+  /* Admin dashboard */
+  .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:16px;}
+  .stat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+  .stat .num{font-size:22px;font-weight:700;color:var(--primary-dark);}
+  .stat .label{font-size:11px;color:var(--text-muted);}
+  table.admin-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13px;}
+  table.admin-table th{background:var(--primary-dark);color:#fff;text-align:left;padding:9px 12px;font-size:11px;}
+  table.admin-table td{padding:9px 12px;border-top:1px solid var(--border);}
+  .filter-bar{display:flex;gap:8px;margin-bottom:12px;}
+  .filter-bar button{border:1px solid var(--border);background:#fff;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;}
+  .filter-bar button.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CombiLive BW — Supporting Materials</h1>
+  <p>BTC Innovation Portal submission · architecture, schema, and working prototypes</p>
+</header>
+
+<nav>
+  <a href="#architecture">1. Architecture</a>
+  <a href="#schema">2. Database schema</a>
+  <a href="#passenger">3. Passenger prototype</a>
+  <a href="#driver">4. Driver wireframes</a>
+  <a href="#admin">5. Admin dashboard</a>
+</nav>
+
+<main>
+
+<section id="architecture">
+  <h2>1. System Architecture Diagram</h2>
+  <p class="lead">How GPS information moves from a participating vehicle to the passenger-facing platform and the admin dashboard.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 760 260" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#6B6A64" stroke-width="1.5"/>
+        </marker>
+      </defs>
+      <rect x="20" y="90" width="140" height="60" rx="8" fill="#EAF3DE" stroke="#0F6E56"/>
+      <text x="90" y="115" text-anchor="middle" font-size="12" font-weight="600" fill="#1D1D1B">Driver</text>
+      <text x="90" y="132" text-anchor="middle" font-size="11" fill="#6B6A64">Smartphone GPS</text>
+
+      <line x1="160" y1="120" x2="220" y2="120" stroke="#6B6A64" stroke-width="1.5" marker-end="url(#ar)"/>
+      <text x="190" y="110" text-anchor="middle" font-size="10" fill="#6B6A64">Mobile network</text>
+
+      <rect x="220" y="90" width="150" height="60" rx="8" fill="#FFFFFF" stroke="#0F6E56"/>
+      <text x="295" y="115" text-anchor="middle" font-size="12" font-weight="600" fill="#1D1D1B">Cloud Backend</text>
+      <text x="295" y="132" text-anchor="middle" font-size="11" fill="#6B6A64">Supabase / Postgres</text>
+
+      <line x1="370" y1="105" x2="430" y2="60" stroke="#6B6A64" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="370" y1="135" x2="430" y2="180" stroke="#6B6A64" stroke-width="1.5" marker-end="url(#ar)"/>
+
+      <rect x="430" y="30" width="150" height="60" rx="8" fill="#EAF3DE" stroke="#0F6E56"/>
+      <text x="505" y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#1D1D1B">Passenger App</text>
+      <text x="505" y="72" text-anchor="middle" font-size="11" fill="#6B6A64">Live map + ETA</text>
+
+      <rect x="430" y="150" width="150" height="60" rx="8" fill="#FAEEDA" stroke="#BA7517"/>
+      <text x="505" y="175" text-anchor="middle" font-size="12" font-weight="600" fill="#1D1D1B">Admin Dashboard</text>
+      <text x="505" y="192" text-anchor="middle" font-size="11" fill="#6B6A64">Fleet monitoring</text>
+
+      <line x1="580" y1="60" x2="630" y2="60" stroke="#6B6A64" stroke-width="1.5" marker-end="url(#ar)"/>
+      <rect x="630" y="30" width="110" height="60" rx="8" fill="#fff" stroke="#888780" stroke-dasharray="4 3"/>
+      <text x="685" y="55" text-anchor="middle" font-size="11" font-weight="600" fill="#1D1D1B">Push alert</text>
+      <text x="685" y="72" text-anchor="middle" font-size="10" fill="#6B6A64">"5 min away"</text>
+
+      <line x1="580" y1="180" x2="630" y2="180" stroke="#6B6A64" stroke-width="1.5" marker-end="url(#ar)"/>
+      <rect x="630" y="150" width="110" height="60" rx="8" fill="#fff" stroke="#888780" stroke-dasharray="4 3"/>
+      <text x="685" y="175" text-anchor="middle" font-size="11" font-weight="600" fill="#1D1D1B">Fraud check</text>
+      <text x="685" y="192" text-anchor="middle" font-size="10" fill="#6B6A64">Flag/suspend</text>
+
+      <text x="290" y="230" text-anchor="middle" font-size="10" fill="#6B6A64">Update interval: every 10s while "online" · LIVE ≤30s · STALE 30s–3min · OFFLINE &gt;3min</text>
+    </svg>
+  </div>
+</section>
+
+<section id="schema">
+  <h2>2. Database Schema</h2>
+  <p class="lead">Core tables and how they relate. Full SQL (with row-level security policies) is included as a separate file, <code>schema.sql</code>.</p>
+  <div class="schema-grid">
+    <div class="schema-card">
+      <h4>routes</h4>
+      <ul>
+        <li><code>id</code> (PK)</li>
+        <li><code>name</code></li>
+        <li><code>origin</code> / <code>destination</code></li>
+        <li><code>color</code></li>
+        <li><code>active</code></li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>drivers</h4>
+      <ul>
+        <li><code>id</code> (PK)</li>
+        <li><code>auth_user_id</code> → auth.users</li>
+        <li><code>full_name</code></li>
+        <li><code>phone_number</code> (private)</li>
+        <li><code>is_active</code> / <code>is_suspended</code></li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>vehicles</h4>
+      <ul>
+        <li><code>id</code> (PK)</li>
+        <li><code>registration</code></li>
+        <li><code>route_id</code> → routes</li>
+        <li><code>driver_id</code> → drivers</li>
+        <li><code>vehicle_type</code></li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>vehicle_locations</h4>
+      <ul>
+        <li><code>id</code> (PK, append-only)</li>
+        <li><code>vehicle_id</code> → vehicles</li>
+        <li><code>driver_id</code> → drivers</li>
+        <li><code>latitude</code> / <code>longitude</code></li>
+        <li><code>recorded_at</code></li>
+        <li><code>tracking_status</code></li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>vehicle_status (view)</h4>
+      <ul>
+        <li>Derives <code>LIVE / STALE / OFFLINE</code> from the latest row in <code>vehicle_locations</code> per vehicle</li>
+        <li>Used by both the passenger app and admin dashboard</li>
+      </ul>
+    </div>
+    <div class="schema-card">
+      <h4>Access rules (RLS)</h4>
+      <ul>
+        <li>Public: read-only on routes/vehicles/locations</li>
+        <li>Drivers: insert only their own vehicle's location</li>
+        <li>Admin: full access via service key, never exposed client-side</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="passenger">
+  <h2>3. Passenger Application Prototype</h2>
+  <p class="lead">Working demo — search a route, tap a vehicle for details. Vehicle positions here are simulated and clearly marked as demo data.</p>
+  <div class="phone">
+    <div class="app-header">CombiLive BW <span>Gaborone</span></div>
+    <div class="app-search"><input id="routeSearch" placeholder="Search a route, e.g. Tlokweng"></div>
+    <div id="map"></div>
+    <div class="demo-note">DEMO DATA</div>
+    <div class="app-list"><h5>Nearby vehicles</h5><div id="vehicleList"></div></div>
+  </div>
+</section>
+
+<section id="driver">
+  <h2>4. Driver Application Wireframes</h2>
+  <p class="lead">Kept deliberately minimal — a driver should not need to interact with this while driving.</p>
+  <div class="driver-screens">
+    <div class="dscreen">
+      <p class="step">1 · Login</p>
+      <p style="font-size:13px;margin:0 0 8px;">Phone number authentication</p>
+      <div class="btn btn-outline">+267 7X XXX XXX</div>
+      <div class="btn btn-primary">Continue</div>
+    </div>
+    <div class="dscreen">
+      <p class="step">2 · Select vehicle & route</p>
+      <div class="status-row"><span>Vehicle</span><span>BW-1234</span></div>
+      <div class="status-row"><span>Route</span><span>Route 8 – Broadhurst</span></div>
+      <div class="btn btn-primary">Go online</div>
+    </div>
+    <div class="dscreen">
+      <p class="step">3 · Tracking active</p>
+      <div class="status-row"><span>GPS</span><span class="ok">✓ Available</span></div>
+      <div class="status-row"><span>Internet</span><span class="ok">✓ Connected</span></div>
+      <div class="status-row"><span>Status</span><span class="ok">TRACKING ACTIVE</span></div>
+      <div class="status-row"><span>Last update</span><span>8 seconds ago</span></div>
+      <div class="btn btn-danger">Stop tracking</div>
+    </div>
+  </div>
+</section>
+
+<section id="admin">
+  <h2>5. Administrative Dashboard Prototype</h2>
+  <p class="lead">Fleet overview with live filtering. Demo data — an admin would see registered vehicles, drivers, and routes here.</p>
+  <div class="admin-stats" id="adminStats"></div>
+  <div class="filter-bar" id="filterBar"></div>
+  <table class="admin-table">
+    <thead><tr><th>Vehicle</th><th>Route</th><th>Driver</th><th>Status</th><th>Last update</th></tr></thead>
+    <tbody id="adminTable"></tbody>
+  </table>
+</section>
+
+</main>
+
+<script>
+const routes = [
+  {id:'r8', name:'Route 8 - Broadhurst', destination:'Broadhurst'},
+  {id:'tlok', name:'Tlokweng route', destination:'Tlokweng'},
+  {id:'mog', name:'Mogoditshane route', destination:'Mogoditshane'},
+];
+let vehicles = [
+  {id:'BW-1234', routeId:'r8', driver:'K. Molefe', lastUpdateSec:8},
+  {id:'BW-5521', routeId:'tlok', driver:'T. Kgosi', lastUpdateSec:95},
+  {id:'BW-3390', routeId:'mog', driver:'B. Seretse', lastUpdateSec:260},
+  {id:'BW-7712', routeId:'r8', driver:'M. Ntsima', lastUpdateSec:15},
+];
+function routeById(id){ return routes.find(r=>r.id===id); }
+function statusFor(sec){ return sec<=30?'LIVE':sec<=180?'STALE':'OFFLINE'; }
+function fmt(sec){ return sec<60 ? sec+'s ago' : Math.round(sec/60)+'m ago'; }
+
+// Passenger list (simplified — no external map tiles needed for this bundled file)
+function renderPassenger(){
+  const q = document.getElementById('routeSearch').value.trim().toLowerCase();
+  const list = document.getElementById('vehicleList');
+  list.innerHTML='';
+  document.getElementById('map').innerHTML = '<div style="height:100%;background:linear-gradient(135deg,#EAF3DE,#F7F6F2);display:flex;align-items:center;justify-content:center;color:#6B6A64;font-size:11px;">Map view (Gaborone)</div>';
+  let any=false;
+  vehicles.forEach(v=>{
+    const r = routeById(v.routeId);
+    if(q && !r.name.toLowerCase().includes(q) && !r.destination.toLowerCase().includes(q)) return;
+    any=true;
+    const s = statusFor(v.lastUpdateSec);
+    const card = document.createElement('div');
+    card.className='vcard';
+    card.innerHTML = `<div><p class="route">${r.name}</p><p class="sub">${v.id} · ${fmt(v.lastUpdateSec)}</p></div><span class="status ${s}">${s}</span>`;
+    list.appendChild(card);
+  });
+  if(!any) list.innerHTML = '<p style="font-size:12px;color:#6B6A64;text-align:center;">No live vehicles currently available.</p>';
+}
+document.getElementById('routeSearch').addEventListener('input', renderPassenger);
+
+// Admin dashboard
+let activeFilter='ALL';
+function renderAdmin(){
+  const counts = {LIVE:0,STALE:0,OFFLINE:0};
+  vehicles.forEach(v=>counts[statusFor(v.lastUpdateSec)]++);
+  document.getElementById('adminStats').innerHTML = `
+    <div class="stat"><div class="num">${vehicles.length}</div><div class="label">Registered vehicles</div></div>
+    <div class="stat"><div class="num">${counts.LIVE}</div><div class="label">Online (live)</div></div>
+    <div class="stat"><div class="num">${counts.STALE}</div><div class="label">Stale</div></div>
+    <div class="stat"><div class="num">${counts.OFFLINE}</div><div class="label">Offline</div></div>
+    <div class="stat"><div class="num">${routes.length}</div><div class="label">Routes</div></div>
+  `;
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML='';
+  ['ALL','LIVE','STALE','OFFLINE'].forEach(f=>{
+    const b=document.createElement('button');
+    b.textContent=f; if(f===activeFilter) b.className='active';
+    b.onclick=()=>{activeFilter=f; renderAdmin();};
+    bar.appendChild(b);
+  });
+  const tbody = document.getElementById('adminTable');
+  tbody.innerHTML='';
+  vehicles.filter(v=>activeFilter==='ALL'||statusFor(v.lastUpdateSec)===activeFilter).forEach(v=>{
+    const r=routeById(v.routeId); const s=statusFor(v.lastUpdateSec);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${v.id}</td><td>${r.name}</td><td>${v.driver}</td><td><span class="status ${s}">${s}</span></td><td>${fmt(v.lastUpdateSec)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+setInterval(()=>{
+  vehicles.forEach(v=>{
+    if(Math.random()<0.35) v.lastUpdateSec = Math.floor(Math.random()*10);
+    else v.lastUpdateSec += 5;
+  });
+  renderPassenger(); renderAdmin();
+}, 5000);
+
+renderPassenger();
+renderAdmin();
+</script>
+</body>
+</html>
